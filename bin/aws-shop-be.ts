@@ -1,21 +1,19 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { AwsShopBeStack } from '../lib/aws-shop-be-stack';
+import { SpaCdkStack } from '../services/aws-s3-cf-stack';
+import { Lambdas } from '../services/aws-shop-be-stack';
+
+class AwsHostingStack extends cdk.Stack {
+  constructor(parent: cdk.App, name: string) {
+    super(parent, name);
+    //new SpaCdkStack (this, 'AWSRSStack');
+    new Lambdas (this, 'Products');
+  }
+}
 
 const app = new cdk.App();
-new AwsShopBeStack(app, 'AwsShopBeStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
 
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
+new AwsHostingStack(app, 'AWSRSStack');
 
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
-
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
-});
+app.synth();
